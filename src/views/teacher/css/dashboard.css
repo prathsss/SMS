@@ -1,0 +1,407 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+}
+
+h1 {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeInDown 0.6s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body > p {
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.6s ease-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: backwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+hr {
+    display: none;
+}
+
+h2 {
+    color: #333;
+    font-size: 22px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #667eea;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #764ba2;
+    border-radius: 2px;
+}
+
+/* Profile Section */
+body > ul {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    animation: slideIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body > ul li {
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    color: #555;
+    font-size: 15px;
+}
+
+body > h2:first-of-type {
+    background: white;
+    border-radius: 15px 15px 0 0;
+    padding: 20px 25px;
+    margin-bottom: 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: slideIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
+}
+
+/* Form Containers */
+form {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.5s ease-out;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form:nth-of-type(1) { animation-delay: 0.4s; animation-fill-mode: backwards; }
+form:nth-of-type(2) { animation-delay: 0.5s; animation-fill-mode: backwards; }
+
+label {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #555;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+    padding: 10px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f9f9f9;
+    margin-left: 10px;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+    color: #555;
+    font-size: 14px;
+    background: white;
+}
+
+tbody tr:hover {
+    background: #f8f9fa;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Radio buttons */
+input[type="radio"] {
+    margin: 0 5px 0 10px;
+    cursor: pointer;
+}
+
+td label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Submit buttons */
+input[type="submit"] {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    margin-top: 15px;
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+input[type="submit"]:active {
+    transform: translateY(-1px);
+}
+
+/* Card Section for Notices */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.5s ease-out;
+    animation-delay: 0.6s;
+    animation-fill-mode: backwards;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #667eea;
+    position: relative;
+}
+
+.card h3::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #764ba2;
+}
+
+.card a {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+}
+
+.card a:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+}
+
+/* Logout Link */
+body > a:last-of-type {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 14px 35px;
+    background: white;
+    color: #ff6b6b;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    animation: fadeIn 0.8s ease-out;
+    animation-delay: 0.7s;
+    animation-fill-mode: backwards;
+    border: 2px solid white;
+}
+
+body > a:last-of-type:hover {
+    background: #ff6b6b;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    body > p {
+        font-size: 16px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    form, .card, body > ul {
+        padding: 25px 20px;
+    }
+
+    table {
+        font-size: 13px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    label {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    body > p {
+        font-size: 15px;
+    }
+
+    h2, .card h3 {
+        font-size: 18px;
+    }
+
+    form, .card, body > ul {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+
+    input[type="submit"],
+    .card a {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    body > a:last-of-type {
+        width: 100%;
+        text-align: center;
+    }
+}
