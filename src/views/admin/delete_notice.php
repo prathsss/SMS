@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('D:\xampp\xampp\htdocs\Student-management-system\config\db.php');
+include('C:\xampp\htdocs\Student-management-system\config\db.php');
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../public/login.php");
