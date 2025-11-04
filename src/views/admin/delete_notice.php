@@ -1,31 +1,22 @@
 <?php
 session_start();
-require_once('D:\xampp\xampp\htdocs\Student-management-system\config\db.php');
+include('D:\xampp\xampp\htdocs\Student-management-system\config\db.php');
 
-// ✅ Allow only admin to delete notices
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: /Student-management-system/public/login.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../public/login.php");
     exit();
 }
 
-// ✅ Check if notice_id is provided
-if (!isset($_GET['notice_id']) || empty($_GET['notice_id'])) {
-    echo "<script>alert('Invalid request!'); window.location.href='view_notice.php';</script>";
-    exit();
-}
+$user_id = $_SESSION['user_id'];
+$notice_id = intval($_GET['notice_id']);
 
-$notice_id = intval($_GET['notice_id']); // Sanitizing input
+// Only delete if this user posted the notice
+$sql = "DELETE FROM notices WHERE notice_id = '$notice_id' AND posted_by = '$user_id'";
+$result = $conn->query($sql);
 
-// ✅ Prepare and execute deletion query
-$stmt = $conn->prepare("DELETE FROM notices WHERE notice_id = ?");
-$stmt->bind_param("i", $notice_id);
-
-if ($stmt->execute()) {
-    echo "<script>alert('Notice deleted successfully!'); window.location.href='view_notice.php';</script>";
+if ($conn->affected_rows > 0) {
+    echo "<script>alert('Notice deleted successfully!'); window.location='view_notice.php';</script>";
 } else {
-    echo "<script>alert('Error deleting notice! Please try again.'); window.location.href='view_notice.php';</script>";
+    echo "<script>alert('You cannot delete this notice.'); window.location='view_notice.php';</script>";
 }
-
-$stmt->close();
-$conn->close();
 ?>

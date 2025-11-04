@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('D:\xampp\htdocs\Student-management-system\config\db.php');
+require_once('C:\xampp\htdocs\Student-management-system\config\db.php');
 
 // ✅ Redirect if user not logged in or not a student
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
