@@ -109,14 +109,10 @@ mysqli_close($conn);
                     
                 </div>
             </div>
-          <div class="summary-card">  
-
- <div class="logout-link">
-                
-            </div>
-</div>
+         
   
         </main>
         
-    </div> </body>
+    </div> 
+</body>
 </html>
