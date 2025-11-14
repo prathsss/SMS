@@ -6,8 +6,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'teacher') {
     header("Location: /student-management-system/public/login.php");
     exit();
 }
-
-require_once('C:\xampp\htdocs\Student-management-system\config\db.php'); 
+require_once('C:\xampp\htdocs\Student-management-system\config\db.php');
 
 $teacher_user_id = (int)$_SESSION['user_id'];
 
@@ -45,14 +44,18 @@ if ($assigned_subject_id) {
 }
 
 // --- 4. Save Marks
+// --- 4. Save Marks
 if (isset($_POST['submit_marks']) && $assigned_subject_id) {
     $exam_name = mysqli_real_escape_string($conn, $_POST['exam_name']);
     $total_marks = (int)$_POST['total_marks'];
     $current_date = date('Y-m-d');
-
+         $error = false; // Flag to track invalid marks
     foreach ($_POST['marks'] as $student_user_id => $marks_obtained) {
         $marks_obtained = (int)$marks_obtained;
-        if ($marks_obtained > $total_marks || $marks_obtained < 0) continue;
+        if ($marks_obtained > $total_marks || $marks_obtained < 0) {
+            $error = true;
+            break;
+        }
 
         $find_student_id_query = "SELECT student_id FROM students WHERE user_id = $student_user_id";
         $student_row = mysqli_fetch_assoc(mysqli_query($conn, $find_student_id_query));
@@ -63,21 +66,23 @@ if (isset($_POST['submit_marks']) && $assigned_subject_id) {
             VALUES ($student_id, $assigned_subject_id, '$exam_name', $marks_obtained, $total_marks, '$current_date')";
         mysqli_query($conn, $marks_insert_sql);
     }
+     if ($error) {
+        echo "<script>alert('Error: Obtained marks cannot exceed total marks or be negative!'); window.history.back();</script>";
+        exit;
+    }
 
     header("Location: dashboard.php?status=marks_saved");
-    exit();
+exit();
 }
 
-// --- 5. Save Attendance (optional extension)
+// --- 5. Save Attendance
 if (isset($_POST['submit_attendance'])) {
     $date = $_POST['date'];
     foreach ($_POST['attendance'] as $student_user_id => $status) {
         $find_student_id_query = "SELECT student_id FROM students WHERE user_id = $student_user_id";
         $student_row = mysqli_fetch_assoc(mysqli_query($conn, $find_student_id_query));
         $student_id = $student_row['student_id'];
-        $status_value = '';
-        if ($status == 'P') $status_value = 'present';
-        elseif ($status == 'A') $status_value = 'absent';
+        $status_value = ($status == 'P') ? 'present' : 'absent';
         mysqli_query($conn, "
             INSERT INTO attendance (student_id, subject_id, date, status)
             VALUES ($student_id, $assigned_subject_id, '$date', '$status_value')");
@@ -86,82 +91,119 @@ if (isset($_POST['submit_attendance'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="css/dashboard.css"> 
+    <meta charset="UTF-8">
     <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<h1>Welcome, <?php echo htmlspecialchars($teacher_name); ?></h1>
-<p>Subject: <b><?php echo htmlspecialchars($assigned_subject_name); ?></b></p>
-<hr>
+<div class="dashboard-layout">
 
-<!-- ✅ Profile Info -->
-<h2>Profile Information</h2>
-<ul>
-    <li>Email: <?php echo $teacher_info['email'] ?? 'N/A'; ?></li>
-    <li>Phone: <?php echo $teacher_info['phone'] ?? 'N/A'; ?></li>
-</ul>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Teacher Panel</h2>
+            <p>Welcome, <strong><?php echo htmlspecialchars($teacher_name); ?></strong></p>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="#attendance">Mark Attendance</a></li>
+            <li><a href="#marks">Enter Marks</a></li>
+            <li><a href="view_notice.php">View Notices</a></li>
+            <li><a href="/student-management-system/public/logout.php">Logout</a></li>
+        </ul>
+    </nav>
 
-<hr>
+    <!-- Main Content -->
+    <main class="main-content">
 
-<!-- ✅ Attendance Form -->
-<h2>1. Mark Attendance</h2>
-<form method="post">
-    <label>Date: <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>" required></label>
-    <table border="1">
-        <tr><th>Roll No</th><th>Name</th><th>Status</th></tr>
-        <?php
-        if ($students_result && mysqli_num_rows($students_result) > 0) {
-            mysqli_data_seek($students_result, 0);
-            while($student = mysqli_fetch_assoc($students_result)) {
-                echo "<tr>
-                        <td>{$student['roll_no']}</td>
-                        <td>{$student['name']}</td>
-                        <td>
-                            <label><input type='radio' name='attendance[{$student['user_id']}]' value='P' checked> P</label>
-                            <label><input type='radio' name='attendance[{$student['user_id']}]' value='A'> A</label>
-                        </td>
-                      </tr>";
-            }
-        } else echo "<tr><td colspan='3'>No students enrolled.</td></tr>";
-        ?>
-    </table>
-    <input type="submit" name="submit_attendance" value="Save Attendance">
-</form>
+        <h1>Teacher Dashboard</h1>
 
-<hr>
+        <!-- Profile -->
+        <section class="summary-card">
+            <h3>Profile Information</h3>
+            <p><b>Email:</b> <?php echo $teacher_info['email'] ?? 'N/A'; ?></p>
+            <p><b>Phone:</b> <?php echo $teacher_info['phone'] ?? 'N/A'; ?></p>
+            <p><b>Subject:</b> <?php echo htmlspecialchars($assigned_subject_name); ?></p>
+        </section>
 
-<!-- ✅ Marks Form -->
-<h2>2. Enter Marks</h2>
-<form method="post">
-    <label>Exam Name: <input type="text" name="exam_name" required></label><br>
-    <label>Total Marks: <input type="number" name="total_marks" min="1" required></label>
-    <table border="1">
-        <tr><th>Roll No</th><th>Name</th><th>Marks</th></tr>
-        <?php
-        if ($students_result && mysqli_num_rows($students_result) > 0) {
-            mysqli_data_seek($students_result, 0);
-            while($student = mysqli_fetch_assoc($students_result)) {
-                echo "<tr>
-                        <td>{$student['roll_no']}</td>
-                        <td>{$student['name']}</td>
-                        <td><input type='number' name='marks[{$student['user_id']}]' min='0' required></td>
-                      </tr>";
-            }
-        } else echo "<tr><td colspan='3'>No students enrolled.</td></tr>";
-        ?>
-    </table>
-    <input type="submit" name="submit_marks" value="Save Marks">
-</form>
-<section class="card">
-  <h3>3. Notices</h3>
-  <a href="add_notice.php">Add Notice</a><br><br>
-<a href="view_notice.php">View Notices</a>
-</section>
-<a href="/student-management-system/public/logout.php">Logout</a>
+        <!-- Attendance Form -->
+        <section class="summary-card" id="attendance">
+            <h3>1. Mark Attendance</h3>
+            <form method="post" class="styled-form">
+                <label>Date:
+                    <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>" required>
+                </label>
+                <table class="styled-table">
+                    <tr><th>Roll No</th><th>Name</th><th>Status</th></tr>
+                    <?php
+                    if ($students_result && mysqli_num_rows($students_result) > 0) {
+                        mysqli_data_seek($students_result, 0);
+                        while($student = mysqli_fetch_assoc($students_result)) {
+                            echo "<tr>
+                                    <td>{$student['roll_no']}</td>
+                                    <td>{$student['name']}</td>
+                                    <td>
+                                        <label><input type='radio' name='attendance[{$student['user_id']}]' value='P' checked> P</label>
+                                        <label><input type='radio' name='attendance[{$student['user_id']}]' value='A'> A</label>
+                                    </td>
+                                  </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3'>No students enrolled.</td></tr>";
+                    }
+                    ?>
+                </table>
+                <button type="submit" name="submit_attendance" class="btn">Save Attendance</button>
+            </form>
+        </section>
+
+        <!-- Marks Form -->
+        <section class="summary-card" id="marks">
+            <h3>2. Enter Marks</h3>
+            <form method="post" class="styled-form">
+                <label>Exam Name:
+                    <input type="text" name="exam_name" required>
+                </label>
+                <label>Total Marks:
+                    <input type="number" name="total_marks" min="1" required>
+                </label>
+                <table class="styled-table">
+                    <tr><th>Roll No</th><th>Name</th><th>Marks</th></tr>
+                    <?php
+                    if ($students_result && mysqli_num_rows($students_result) > 0) {
+                        mysqli_data_seek($students_result, 0);
+                        while($student = mysqli_fetch_assoc($students_result)) {
+                            echo "<tr>
+                                    <td>{$student['roll_no']}</td>
+                                    <td>{$student['name']}</td>
+                                    <td><input type='number' name='marks[{$student['user_id']}]' min='0' required></td>
+                                  </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3'>No students enrolled.</td></tr>";
+                    }
+                    ?>
+                </table>
+                <button type="submit" name="submit_marks" class="btn">Save Marks</button>
+            </form>
+        </section>
+
+        <!-- Notices -->
+        <section class="summary-card">
+            <h3>3. Notices</h3>
+            <div class="card-link">
+                <a href="add_notice.php">Add Notice &rarr;</a>
+                <a href="view_notice.php">View Notices &rarr;</a>
+            </div>
+        </section>
+
+    </main>
+</div>
+
 </body>
 </html>

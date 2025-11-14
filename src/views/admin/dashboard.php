@@ -32,6 +32,12 @@ $course_result = mysqli_query($conn, $course_sql);
 $course_data = mysqli_fetch_assoc($course_result);
 $course_count = $course_data['dep_count'];
 
+// Count Notices (from the 'notices' table where role is 'teacher')
+$notice_sql = "SELECT COUNT(notice_id) AS notice_count FROM notices ";
+$notice_result = mysqli_query($conn, $notice_sql);
+$notice_data = mysqli_fetch_assoc($notice_result);
+$notice_count = $notice_data['notice_count'];
+
 // Close the connection as we are done with queries
 mysqli_close($conn);
 ?>
@@ -60,6 +66,7 @@ mysqli_close($conn);
                 <li><a href="teachers.php">Manage Teachers</a></li>
                 <li><a href="add_notice.php">Add Notices</a></li>
                 <li> <a href="view_notice.php">Notices</a></li>
+                <li><a href="/student-management-system/public/logout.php">Logout</a></li>
             </ul>
 
          
@@ -87,14 +94,14 @@ mysqli_close($conn);
                 </div>
                 <div class="summary-card">
                     <h3>Add Notices</h3>
-                    
+                    <p class="count"><?php echo $notice_count; ?></p>
                     <div class="card-link">
                         <a href="add_notice.php">Add Notice &rarr;</a>
                     </div>
                 </div>
                 <div class="summary-card">
                     <h3>View Notices</h3>
-                    
+                    <p class="count"><?php echo $notice_count; ?></p>
                     <div class="card-link">
                         <a href="view_notice.php">View Notices &rarr;</a>
                     </div>
@@ -105,7 +112,7 @@ mysqli_close($conn);
           <div class="summary-card">  
 
  <div class="logout-link">
-                <a href="/student-management-system/public/logout.php">Logout</a>
+                
             </div>
 </div>
   
