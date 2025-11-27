@@ -14,14 +14,14 @@ if (isset($_GET['search'])) {
 }
 
 
-$sql = "SELECT s.student_id, s.roll_no, s.name, s.gender, s.dob, s.address, s.phone, d.dep_name
+$sql = "SELECT s.student_id, s.roll_no, s.name, s.gender, s.dob, s.address, s.phone, d.semester_name
         FROM students s
-        LEFT JOIN department d ON s.dep_id = d.dep_id
+        LEFT JOIN semesters d ON s.semester_id = d.semester_id
         WHERE s.name LIKE '%$search%'
         OR s.roll_no LIKE '%$search%'
         OR s.phone LIKE '%$search%'
         OR s.address LIKE '%$search%'
-        OR d.dep_name LIKE '%$search%'";
+        OR d.semester_name LIKE '%$search%'";
 
 $result = mysqli_query($conn, $sql);
 ?>
@@ -68,7 +68,7 @@ function searchNow() {
                         <th>Date of Birth</th>
                         <th>Address</th>
                         <th>Phone</th>
-                        <th>Department</th>
+                        <th>Semester</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -82,7 +82,7 @@ function searchNow() {
                         <td><?php echo htmlspecialchars($row['dob']); ?></td>
                         <td><?php echo htmlspecialchars($row['address']); ?></td>
                         <td><?php echo htmlspecialchars($row['phone']); ?></td>
-                        <td><?php echo htmlspecialchars($row['dep_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['semester_name']); ?></td>
                         <td class="action-links">
                             <a href="edit_student.php?id=<?php echo $row['student_id']; ?>" class="action-edit">Edit</a>
                             <span class="separator">|</span>

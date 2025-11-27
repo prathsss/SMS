@@ -113,6 +113,7 @@ if (isset($_POST['submit_attendance'])) {
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="#attendance">Mark Attendance</a></li>
             <li><a href="#marks">Enter Marks</a></li>
+            <li><a href="add_notice.php">Add Notice</a></li>
             <li><a href="view_notice.php">View Notices</a></li>
             <li><a href="/student-management-system/public/logout.php">Logout</a></li>
         </ul>
